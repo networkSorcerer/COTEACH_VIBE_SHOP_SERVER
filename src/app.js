@@ -21,6 +21,7 @@ app.use("/api", router);
 
 // Fallback for unmatched routes
 app.use((req, res) => {
+  console.log(`404: ${req.method} ${req.path}`);
   res.status(404).json({ message: "Not found" });
 });
 
