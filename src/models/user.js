@@ -1,41 +1,32 @@
-import mongoose from "mongoose";
-
-const { Schema, model, models } = mongoose;
-
-const userSchema = new Schema(
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+const userSchema = Schema(
   {
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
-    },
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    user_type: {
-      type: String,
-      required: true,
-      enum: ["customer", "admin"],
-      default: "customer",
-    },
-    address: {
-      type: String,
-    },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    name: { type: String, required: true },
+    level: { type: String, default: "customer" },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const User = models.User || model("User", userSchema);
+userSchema.methods.toJSON = function () {
+  const obj = this._doc;
+  delete obj.password;
+  delete obj.__v;
+  delete obj.updatedAt;
+  delete obj.createdAt;
+  return obj;
+};
 
-export default User;
-
+userSchema.methods.generateToken = async function () {
+  const token = await jwt.sign({ _id: this._id }, JWT_SECRET_KEY, {
+    expiresIn: "1d",
+  });
+  return token;
+};
+module.exports =
+  mongoose.models.User || mongoose.model("User", userSchema);

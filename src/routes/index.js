@@ -1,16 +1,14 @@
-import { Router } from "express";
-import userRouter from "./users.js";
-import authRouter from "./auth.js";
-import productRouter from "./products.api.js";
-const router = Router();
+const express = require("express");
+const router = express.Router();
+const userApi = require("./user.api");
+const authApi = require("./auth.api");
+const productApi = require("./product.api");
+const cartApi = require("./cart.api");
+const orderApi = require("./order.api");
+router.use("/user", userApi);
+router.use("/auth", authApi);
+router.use("/product", productApi);
+router.use("/cart", cartApi);
+router.use("/order", orderApi);
 
-router.get("/", (req, res) => {
-  res.json({ message: "API root" });
-});
-
-router.use("/users", userRouter);
-router.use("/auth", authRouter);
-router.use("/products", productRouter);
-
-export default router;
-
+module.exports = router;
