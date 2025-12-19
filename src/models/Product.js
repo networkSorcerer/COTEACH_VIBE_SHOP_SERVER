@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const User = require("./user.js");
+const User = require("./User.js");
 const productSchema = Schema(
   {
     sku: { type: String, required: true, unique: true },
