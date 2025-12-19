@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import User from "../src/models/user.js";
+import User from "../models/User.js";
 
 const SALT_ROUNDS = 10;
 
